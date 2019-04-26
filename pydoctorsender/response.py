@@ -1,5 +1,5 @@
-from xml2dict import xml2dict
-from errors import DrsReturnError
+from pydoctorsender.xml2dict import xml2dict
+from pydoctorsender.errors import DrsReturnError
 
 
 class DrsResponse:

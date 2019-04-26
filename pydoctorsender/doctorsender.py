@@ -1,8 +1,8 @@
 import json
 import requests
 
-from response import DrsResponse
-from errors import *
+from pydoctorsender.response import DrsResponse
+from pydoctorsender.errors import *
 
 
 class DoctorSenderClient:
@@ -403,7 +403,7 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsCategoryGetAll', None)
         return drs_response.content
 
-    def drom_emails(self):
+    def from_emails(self):
         drs_response = self._post_request('dsSettingsGetAllFromEmail', None)
         return drs_response.content
 

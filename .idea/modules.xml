@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/doctorsender.iml" filepath="$PROJECT_DIR$/.idea/doctorsender.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PyDoctorSender.iml" filepath="$PROJECT_DIR$/.idea/PyDoctorSender.iml" />
     </modules>
   </component>
 </project>

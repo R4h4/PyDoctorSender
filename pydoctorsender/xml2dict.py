@@ -8,7 +8,6 @@ def xml2dict(s):
 
 
 def parse(ele):
-    result = None
     tags = []
     p_childs = []
     for child in ele.getchildren():
@@ -24,9 +23,7 @@ def parse(ele):
         return text
 
     if len(set(tags)) < len(tags):
-        result = []
         result = [dict([x]) for x in p_childs]
     else:
-        result = {}
         result = dict(p_childs)
     return result
