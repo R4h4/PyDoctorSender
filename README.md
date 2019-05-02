@@ -1,8 +1,9 @@
 # PyDoctorSender - An unofficial Python API for DoctorSender
 
-PyDoctorsSender is an unofficial API wrapper for the email sending system [DoctorSender]
-(https://www.doctorsender.com/en/). It provides and easy and accessible way to automate
+PyDoctorsSender is an unofficial API wrapper for the email sending system [DoctorSender](https://www.doctorsender.com/en). It provides and easy and accessible way to automate
 everything you can do on the GUI and more.
+
+The full documentation can be found here: [docs](http://htmlpreview.github.io/?https://github.com/R4h4/docs/build/html/index.html)
 
 ## Installation
 ```installation

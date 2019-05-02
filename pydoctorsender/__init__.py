@@ -1,1 +1,1 @@
-from pydoctorsender.doctorsender import DoctorSenderClient
+from .doctorsender import DoctorSenderClient

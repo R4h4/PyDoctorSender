@@ -41,8 +41,8 @@ class DoctorSenderClient:
                     """
 
     def _post_request(self, function_name: str, data: str, ur_type: int = 3) -> DrsResponse:
-        """
-        Every request to the API is a POST request (because fo the SOAP standard). This method constructs the request
+        """Every request to the API is a POST request (because fo the SOAP standard). This method constructs the request
+
         :param function_name: String with API function name as per Doctorsender API docs
         :param data: String in xml format containing all additional parameters for the call
         :param ur_type: Int, either 2 or 3, different depending on how the xml data looks like
@@ -58,12 +58,12 @@ class DoctorSenderClient:
 
     # ------ Segment Methods ------
 
-    def segments(self, listname: str):
+    def segments(self, listname: str) -> dict:
         """
         Gets all segments for a given list
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6e4e54b8a7ebac3119e9724db6668ee9
         :param listname: String with the list name as displayed in Doctorsender
-        :return: DrsResponse object, .content returns a dict with segment_id as key and segment_name as value
+        :return: Dict with segment_id as key and segment_name as value
         """
         data = f'<item xsi:type="xsd:str">{listname}</item>'
         drs_response = self._post_request('dsSegmentsGetByListName', data)
@@ -77,9 +77,10 @@ class DoctorSenderClient:
         return segments
 
     def segment_count(self, segment_id: int) -> int:
-        """
-        Count users in a segment
+        """Count users in a segment
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a91a9d148530550258f4c752b13517d
+
         :param segment_id: int with the segment id
         :return: DrsResponse object, .content returns string with the number of users in the segment
         """
@@ -94,9 +95,10 @@ class DoctorSenderClient:
         return count
 
     def create_segment(self, list_name: str, segment_name: str, is_virtual: bool = False) -> int:
-        """
-        Create a new segment without any conditions
+        """Create a new segment without any conditions
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a480ce73993491e184b94a45ac0c04f23
+
         :param list_name: String with the list name as displayed in Doctorsender
         :param segment_name: String of the name of the new segment
         :param is_virtual: Bool, Virtual means invisible, set to False when Segment should be visible in the GUI
@@ -119,12 +121,14 @@ class DoctorSenderClient:
         return segment_id
 
     def segment_add_condition(self, segment_id: int, field_name: str, comparator: str, value: str, is_or: bool = False,
-                               is_date: bool = False):
-        """
-        Add a new condition to an existing segment,
+                               is_date: bool = False) -> int:
+        """Add a new condition to an existing segment
+
         Notes: Each field can only have one condition, the api (.content in return object) returns false if the field
         does not exists
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a8492fe606dee505fc335832b45f217
+
         :param segment_id: Id of the segment the condition shall apply for
         :param field_name: The field the condition compares against
         :param comparator: String, valid comparators are: <, >, ==, !=, <=, >=, like, not like, in, not in, segment
@@ -173,13 +177,14 @@ class DoctorSenderClient:
 
         return segment_count
 
-    def segment_del_condition(self, segment_id: int, field_name: str):
-        """
-        Removed the condition for a given field in a given segment
+    def segment_del_condition(self, segment_id: int, field_name: str) -> int:
+        """Removed the condition for a given field in a given segment
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a43b4a364c02d1bd151e5e4f79e166c68
+
         :param segment_id: Id of the segment the condition applies for
         :param field_name: The field name of the condition
-        :return: DrsResponse object, .content returns string with amount of users in the segment after removing condition
+        :return: Int with amount of users in the segment after removing condition
         """
         data = f"""
             <item xsi:type="xsd:int">{segment_id}</item>
@@ -194,12 +199,16 @@ class DoctorSenderClient:
         return segment_count
 
     def delete_segment(self, segment_id: int):
-        """
-        Deletes a segment. Warning: Will also return True if the segment did not exist in the first place
+        """Delete a segment
+
+        Warning: Will also return True if the segment did not exist in the first place
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a77c4449df7d20441e588650b9497bd0c
+
         :param segment_id: Id of the segment the condition applies for
         :return: Boolean if deletion was successful
         """
+
         data = f"""<item xsi:type="xsd:int">{segment_id}</item>"""
         drs_response = self._post_request('dsSegmentsDel', data)
 
@@ -216,15 +225,17 @@ class DoctorSenderClient:
 
     # ------------------------------ Campaign Methods ------------------------------
 
-    def campaign(self, campaign_id: int):
-        """
-        Gets both the campaign statistics (e.g. Amt Send, Amt Opend) and configuration parameters (e.g. from email) of a given campaign
+    def campaign(self, campaign_id: int) -> dict:
+        """Gets both the campaign statistics (e.g. Amt Send, Amt Opend) and configuration parameters (e.g. from email) of a given campaign
+
         :param campaign_id: Int
+
         :return: Dict, empty if the campaign does not exist, else containing the following keys/fields and their values (all as string):
             'status', 'amount', 'opens', 'clicks', 'deliveries', 'bounced', 'complaints', 'unsubscribes', 'cvars',
             'unicViews', 'unicClics', 'id', 'category_id', 'name', 'subject', 'from_name', 'from_email', 'sender',
             'segment_id', 'segment', 'user_list', 'country', 'send_date', 'reply_to', 'list_unsubscribe', 'bounceds_soft'
         """
+
         available_fields = ["name", "amount", "subject", "from_name", "from_email", "sender", "segment_id",
                             "segment", "user_list", "country", "send_date", "reply_to", "list_unsubscribe"]
         # "text", "html", "utm_source", "utm_medium", "utm_term", "utm_content", "utm_campaign"
@@ -250,8 +261,8 @@ class DoctorSenderClient:
                         html: str, plain: str, template_id: int = '', category_id: int = 1, country: str = 'GER',
                         language_id: int = 3, list_unsubscribe: str = '', utm_campaign: str = '', utm_term: str = '',
                         utm_content: str = '', footer_usub_link: str = '', mirror_link: str = ''):
-        """
-        Creates (but not sends) a new campaign
+        """Creates (but not sends) a new campaign
+
         :param campaign_name: String with the name of the campaign
         :param subject: String with the email subject
         :param from_name: String with the from name for that email
@@ -264,6 +275,7 @@ class DoctorSenderClient:
         :param category_id: The category id, all categories with their id can be retrieved with dsCategoryGetAll
         :param country: The iso3 country code for that mailing, can be retrieved with dsCountryGetAll
         :param language_id: The language id, can be retrieved with dsLanguageGetAll
+
         :return: Int with the id of the new campaign
         """
         # To avoid hard to catch 'SOAP-ENV:Client'-errors due to using non existing from_email or reply_to email address
@@ -313,13 +325,17 @@ class DoctorSenderClient:
 
         return campaign_id
 
-    def delete_campaign(self, campaign_id: int):
-        """
-        Deletes a campaign. Warning: Will also return True if the campaign did not exist in the first place
+    def delete_campaign(self, campaign_id: int) -> bool:
+        """Delete a campaign
+
+        Warning: Will also return True if the campaign did not exist in the first place
+
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_campaign.html#a4a57c512898aab19aed88ac82c536c5e
+
         :param segment_id: Id of the segment the condition applies for
         :return: Boolean if deletion was successful
         """
+
         data = f"""<item xsi:type="xsd:int">{campaign_id}</item>"""
         drs_response = self._post_request('dsCampaignDelete', data)
 
@@ -335,12 +351,13 @@ class DoctorSenderClient:
         return deleted
 
     def send_campaign_test(self, campaign_id: int, emails: list) -> bool:
-        """
-        Sends test emails for a given campaign
+        """Send test emails for a given campaign
+
         :param campaign_id: Int with the id of the campaign to be send
         :param emails: List of valid email addresses
         :return: DrsResponse object, .content returns string with bool if test sendout was successful
         """
+
         assert type(emails) == list, "Param emails has to be a list of valid email addresses"
 
         receivers = ""
@@ -371,12 +388,14 @@ class DoctorSenderClient:
     # ------------------------------ User Methods ------------------------------
 
     def lists(self, test_lists=0):
-            """
-            Gets all user lists in the account
+            """Get all user lists in the account
+
             Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_users.html#a3bd42970a9819091a5220cfed0b578c0
+
             :param test_lists: 1 to only get Testlists, 0 to get only get non-test lists and '' to get all available lists
             :return: DrsResponse object, .content returns a dict with segment_id as key and segment_name as value
             """
+
             assert test_lists in [0, 1, ''], "test_lists needs to be 0, 1 or ''"
 
             data = f'<item xsi:type="xsd:str">{test_lists}</item>'
@@ -386,24 +405,46 @@ class DoctorSenderClient:
 
     # ------------------------------ Static Methods ------------------------------
 
-    def ip_groups(self):
+    def ip_groups(self) -> list:
+        """Get all account ip-groups
+
+        :return: List containing the name of all ip-groups
+        """
         drs_response = self._post_request('dsIpGroupGetNames', None)
-        return drs_response
         return drs_response.content
 
-    def languages(self):
+    def languages(self) -> dict:
+        """Get all languages
+        Static function, should never change
+
+        :return: Dict containing language id as key and language name as value
+        """
         drs_response = self._post_request('dsLanguageGetAll', None)
         return drs_response.content
 
     def countries(self):
+        """Get all countries
+        Static function, should never change
+
+        :return: Dict containing country iso-3 code as key and country name as value
+        """
         drs_response = self._post_request('dsCountryGetAll', None)
         return drs_response.content
 
     def categories(self):
+        """Get all categories
+        Static function, should never change
+
+        :return: Dict containing category id as key and category name as value
+        """
         drs_response = self._post_request('dsCategoryGetAll', None)
         return drs_response.content
 
     def from_emails(self):
+        """Get all account from-emails
+
+        :return: List containing all available email addresses
+        """
         drs_response = self._post_request('dsSettingsGetAllFromEmail', None)
         return drs_response.content
 
