@@ -1,8 +1,8 @@
 import json
 import requests
 
-from pydoctorsender.response import DrsResponse
-from pydoctorsender.errors import *
+from .response import DrsResponse
+from .errors import *
 
 
 class DoctorSenderClient:
@@ -246,10 +246,10 @@ class DoctorSenderClient:
 
         return campaign_stats
 
-    def create_campaign(self, campaign_name: str, subject: str, from_name: str, from_email: str, reply_to: str, html: str,
-                      plain: str, template_id: int = '', category_id: int = 1, country: str = 'GER',
-                      language_id: int = 3, list_unsubscribe: str = '', utm_campaign: str = '', utm_term: str = '',
-                      utm_content: str = '', footer_usub_link: str = '', mirror_link: str = ''):
+    def create_campaign(self, campaign_name: str, subject: str, from_name: str, from_email: str, reply_to: str,
+                        html: str, plain: str, template_id: int = '', category_id: int = 1, country: str = 'GER',
+                        language_id: int = 3, list_unsubscribe: str = '', utm_campaign: str = '', utm_term: str = '',
+                        utm_content: str = '', footer_usub_link: str = '', mirror_link: str = ''):
         """
         Creates (but not sends) a new campaign
         :param campaign_name: String with the name of the campaign

@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to PyDoctorSender’s documentation! &mdash; PyDoctorSender 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> PyDoctorSender
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to PyDoctorSender’s documentation!</a></li>
+<li><a class="reference internal" href="#pydoctorsender-client">PyDoctorSender Client</a></li>
+<li><a class="reference internal" href="#pydoctorsender-errors">PyDoctorSender Errors</a></li>
+<li><a class="reference internal" href="#pydoctorsender-response">PyDoctorSender Response</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">PyDoctorSender</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to PyDoctorSender’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-pydoctorsender-s-documentation">
+<h1>Welcome to PyDoctorSender’s documentation!<a class="headerlink" href="#welcome-to-pydoctorsender-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="pydoctorsender-client">
+<h1>PyDoctorSender Client<a class="headerlink" href="#pydoctorsender-client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient">
+<em class="property">class </em><code class="descclassname">pydoctorsender.doctorsender.</code><code class="descname">DoctorSenderClient</code><span class="sig-paren">(</span><em>user</em>, <em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.campaign">
+<code class="descname">campaign</code><span class="sig-paren">(</span><em>campaign_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.campaign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets both the campaign statistics (e.g. Amt Send, Amt Opend) and configuration parameters (e.g. from email) of a given campaign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>campaign_id</strong> – Int</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dict, empty if the campaign does not exist, else containing the following keys/fields and their values (all as string):
+‘status’, ‘amount’, ‘opens’, ‘clicks’, ‘deliveries’, ‘bounced’, ‘complaints’, ‘unsubscribes’, ‘cvars’,
+‘unicViews’, ‘unicClics’, ‘id’, ‘category_id’, ‘name’, ‘subject’, ‘from_name’, ‘from_email’, ‘sender’,
+‘segment_id’, ‘segment’, ‘user_list’, ‘country’, ‘send_date’, ‘reply_to’, ‘list_unsubscribe’, ‘bounceds_soft’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.categories">
+<code class="descname">categories</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.categories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all categories
+Static function, should never change</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing category id as key and category name as value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.countries">
+<code class="descname">countries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.countries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all countries
+Static function, should never change</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing country iso-3 code as key and country name as value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.create_campaign">
+<code class="descname">create_campaign</code><span class="sig-paren">(</span><em>campaign_name: str</em>, <em>subject: str</em>, <em>from_name: str</em>, <em>from_email: str</em>, <em>reply_to: str</em>, <em>html: str</em>, <em>plain: str</em>, <em>template_id: int = ''</em>, <em>category_id: int = 1</em>, <em>country: str = 'GER'</em>, <em>language_id: int = 3</em>, <em>list_unsubscribe: str = ''</em>, <em>utm_campaign: str = ''</em>, <em>utm_term: str = ''</em>, <em>utm_content: str = ''</em>, <em>footer_usub_link: str = ''</em>, <em>mirror_link: str = ''</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.create_campaign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates (but not sends) a new campaign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>campaign_name</strong> – String with the name of the campaign</p></li>
+<li><p><strong>subject</strong> – String with the email subject</p></li>
+<li><p><strong>from_name</strong> – String with the from name for that email</p></li>
+<li><p><strong>from_email</strong> – String with the from email for that email, the email needs be to available in drs
+(can be checked with dsSettingsGetAllFromEmail)</p></li>
+<li><p><strong>reply_to</strong> – String with the from email for that email, also needs to be set up and available</p></li>
+<li><p><strong>html</strong> – Html template for the email</p></li>
+<li><p><strong>plain</strong> – Text template for the email</p></li>
+<li><p><strong>template_id</strong> – int of the template (header and footer) to be used</p></li>
+<li><p><strong>category_id</strong> – The category id, all categories with their id can be retrieved with dsCategoryGetAll</p></li>
+<li><p><strong>country</strong> – The iso3 country code for that mailing, can be retrieved with dsCountryGetAll</p></li>
+<li><p><strong>language_id</strong> – The language id, can be retrieved with dsLanguageGetAll</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Int with the id of the new campaign</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.create_segment">
+<code class="descname">create_segment</code><span class="sig-paren">(</span><em>list_name: str</em>, <em>segment_name: str</em>, <em>is_virtual: bool = False</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.create_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new segment without any conditions</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a480ce73993491e184b94a45ac0c04f23">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a480ce73993491e184b94a45ac0c04f23</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_name</strong> – String with the list name as displayed in Doctorsender</p></li>
+<li><p><strong>segment_name</strong> – String of the name of the new segment</p></li>
+<li><p><strong>is_virtual</strong> – Bool, Virtual means invisible, set to False when Segment should be visible in the GUI</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Int with the new segment_id</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.delete_campaign">
+<code class="descname">delete_campaign</code><span class="sig-paren">(</span><em>campaign_id: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.delete_campaign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a campaign</p>
+<p>Warning: Will also return True if the campaign did not exist in the first place</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_campaign.html#a4a57c512898aab19aed88ac82c536c5e">http://soapwebservice.doctorsender.com/doxy/html/classds_campaign.html#a4a57c512898aab19aed88ac82c536c5e</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segment_id</strong> – Id of the segment the condition applies for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean if deletion was successful</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.delete_segment">
+<code class="descname">delete_segment</code><span class="sig-paren">(</span><em>segment_id: int</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.delete_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a segment</p>
+<p>Warning: Will also return True if the segment did not exist in the first place</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a77c4449df7d20441e588650b9497bd0c">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a77c4449df7d20441e588650b9497bd0c</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segment_id</strong> – Id of the segment the condition applies for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean if deletion was successful</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.from_emails">
+<code class="descname">from_emails</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.from_emails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all account from-emails</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List containing all available email addresses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.ftp_data">
+<code class="descname">ftp_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.ftp_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.ip_groups">
+<code class="descname">ip_groups</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.ip_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all account ip-groups</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List containing the name of all ip-groups</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.languages">
+<code class="descname">languages</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.languages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all languages
+Static function, should never change</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing language id as key and language name as value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.lists">
+<code class="descname">lists</code><span class="sig-paren">(</span><em>test_lists=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.lists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all user lists in the account</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_users.html#a3bd42970a9819091a5220cfed0b578c0">http://soapwebservice.doctorsender.com/doxy/html/classds_users.html#a3bd42970a9819091a5220cfed0b578c0</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>test_lists</strong> – 1 to only get Testlists, 0 to get only get non-test lists and ‘’ to get all available lists</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DrsResponse object, .content returns a dict with segment_id as key and segment_name as value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.segment_add_condition">
+<code class="descname">segment_add_condition</code><span class="sig-paren">(</span><em>segment_id: int</em>, <em>field_name: str</em>, <em>comparator: str</em>, <em>value: str</em>, <em>is_or: bool = False</em>, <em>is_date: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.segment_add_condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new condition to an existing segment</p>
+<p>Notes: Each field can only have one condition, the api (.content in return object) returns false if the field
+does not exists</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a8492fe606dee505fc335832b45f217">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a8492fe606dee505fc335832b45f217</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segment_id</strong> – Id of the segment the condition shall apply for</p></li>
+<li><p><strong>field_name</strong> – The field the condition compares against</p></li>
+<li><p><strong>comparator</strong> – String, valid comparators are: &lt;, &gt;, ==, !=, &lt;=, &gt;=, like, not like, in, not in, segment</p></li>
+<li><p><strong>value</strong> – String, value the field shall be compared with</p></li>
+<li><p><strong>is_or</strong> – Boolean, only works if comparator is ‘segment’</p></li>
+<li><p><strong>is_date</strong> – Boolean, set to true if the value is a date</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Int with amount of users in this segment after adding condition</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.segment_count">
+<code class="descname">segment_count</code><span class="sig-paren">(</span><em>segment_id: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.segment_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count users in a segment</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a91a9d148530550258f4c752b13517d">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6a91a9d148530550258f4c752b13517d</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>segment_id</strong> – int with the segment id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DrsResponse object, .content returns string with the number of users in the segment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.segment_del_condition">
+<code class="descname">segment_del_condition</code><span class="sig-paren">(</span><em>segment_id: int</em>, <em>field_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.segment_del_condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removed the condition for a given field in a given segment</p>
+<p>Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a43b4a364c02d1bd151e5e4f79e166c68">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a43b4a364c02d1bd151e5e4f79e166c68</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segment_id</strong> – Id of the segment the condition applies for</p></li>
+<li><p><strong>field_name</strong> – The field name of the condition</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DrsResponse object, .content returns string with amount of users in the segment after removing condition</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.segments">
+<code class="descname">segments</code><span class="sig-paren">(</span><em>listname: str</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.segments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all segments for a given list
+Doc: <a class="reference external" href="http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6e4e54b8a7ebac3119e9724db6668ee9">http://soapwebservice.doctorsender.com/doxy/html/classds_segments.html#a6e4e54b8a7ebac3119e9724db6668ee9</a>
+:param listname: String with the list name as displayed in Doctorsender
+:return: DrsResponse object, .content returns a dict with segment_id as key and segment_name as value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pydoctorsender.doctorsender.DoctorSenderClient.send_campaign_test">
+<code class="descname">send_campaign_test</code><span class="sig-paren">(</span><em>campaign_id: int</em>, <em>emails: list</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#pydoctorsender.doctorsender.DoctorSenderClient.send_campaign_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send test emails for a given campaign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>campaign_id</strong> – Int with the id of the campaign to be send</p></li>
+<li><p><strong>emails</strong> – List of valid email addresses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DrsResponse object, .content returns string with bool if test sendout was successful</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pydoctorsender-errors">
+<h1>PyDoctorSender Errors<a class="headerlink" href="#pydoctorsender-errors" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt>
+<em class="property">exception </em><code class="descclassname">pydoctorsender.errors.</code><code class="descname">DrsCampaignError</code></dt>
+<dd><p>Raised when Doctorsender returns an Error.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt>
+<em class="property">exception </em><code class="descclassname">pydoctorsender.errors.</code><code class="descname">DrsListError</code></dt>
+<dd><p>Raised when a List is called that does not exist.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt>
+<em class="property">exception </em><code class="descclassname">pydoctorsender.errors.</code><code class="descname">DrsReturnError</code></dt>
+<dd><p>Raised when Doctorsender returns an Error.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt>
+<em class="property">exception </em><code class="descclassname">pydoctorsender.errors.</code><code class="descname">DrsSegmentError</code></dt>
+<dd><p>Raised when the Segment does not exist or is wrongfully constructed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt>
+<em class="property">exception </em><code class="descclassname">pydoctorsender.errors.</code><code class="descname">Error</code></dt>
+<dd><p>Base class for other exceptions.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="pydoctorsender-response">
+<h1>PyDoctorSender Response<a class="headerlink" href="#pydoctorsender-response" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pydoctorsender.response.DrsResponse">
+<em class="property">class </em><code class="descclassname">pydoctorsender.response.</code><code class="descname">DrsResponse</code><span class="sig-paren">(</span><em>res</em><span class="sig-paren">)</span><a class="headerlink" href="#pydoctorsender.response.DrsResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DrsResponse object deals with the (pretty convoluted) xml response of the Doctorsender API</p>
+<dl class="attribute">
+<dt id="pydoctorsender.response.DrsResponse.content">
+<code class="descname">content</code><a class="headerlink" href="#pydoctorsender.response.DrsResponse.content" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returns the inner content of the API response (remove all unnecessary stuff around</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Karsten Eckhardt
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

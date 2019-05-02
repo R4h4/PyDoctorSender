@@ -1,0 +1,7 @@
+pydoctorsender
+==============
+
+.. toctree::
+   :maxdepth: 4
+
+   pydoctorsender
