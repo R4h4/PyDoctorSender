@@ -1,5 +1,6 @@
 import json
 import requests
+import datetime as dt
 
 from .response import DrsResponse
 from .errors import *
@@ -10,6 +11,7 @@ class DoctorSenderClient:
         self.user = user
         self.token = token
         self.url = 'https://soapwebservice.doctorsender.com/soapserver.php'
+        self.ips = self._ip_groups()  # Should always be "default', call to ensure that user and token are valid
 
     def _construct_body(self, methode, data, ur_type):
         if data:
@@ -355,7 +357,7 @@ class DoctorSenderClient:
 
         :param campaign_id: Int with the id of the campaign to be send
         :param emails: List of valid email addresses
-        :return: DrsResponse object, .content returns string with bool if test send out was successful
+        :return: Boolean, True if test send out was successful
         """
 
         assert type(emails) == list, "Param emails has to be a list of valid email addresses"
@@ -385,35 +387,58 @@ class DoctorSenderClient:
 
         return sent
 
-    def send_campaign_list(self, campaign_id: int, list_name: str, ip_group_name: str='', ) -> bool:
-        """Send test emails for a given campaign
-
+    def send_campaign_list(self, campaign_id: int, list_name: str, ip_group_name: str='', speed: int=5,
+                           segment_id: int=0, partition_id: int=0, amount: int=0, auto_delete_list: bool=False,
+                           programmed_date: dt.datetime = dt.datetime.now(), time_zone: str= 'Europe/Madrid',
+                           need_confirm: int=0, multidate: list="", has_to_be_reprogrammed: int = 0,
+                           create_accum: int=1) -> bool:
+        """
+        Send an existing campaign to a list or segment
         :param campaign_id: Int with the id of the campaign to be send
-        :param emails: List of valid email addresses
-        :return: DrsResponse object, .content returns string with bool if test send out was successful
+        :param list_name: Name of the list, the campaign will be send to
+        :param ip_group_name: Name of the ipGroup where the campaign will be sent
+        :param speed: Int, emails per second, default is 18k/hour
+        :param segment_id: Int, id of the segment, must exist under the chosen list
+        :param partition_id: Int, A partition of the list identifier. "0" if no partition is defined.
+        :param amount: A max amount to be sent. If 0, campaign is sent to all users in list
+        :param auto_delete_list: Boolean, Remove the list automatically when the campaign is sent.
+        :param programmed_date:
+        :param time_zone: Str, the time zone of the campaign. Defaults to Madrid time
+        :param need_confirm: Int, 0 or 1, if 1, then campaign will be programmed but sendout start needs confirmation
+        :param multidate: list of valid datetimes. If chosen, the sendout will be split evenly over the dates.
+            In that case, programmed_date will be ignored
+        :param has_to_be_reprogrammed: For a long scheduled campaign it force to recalculate the campaign amount before
+            sent. 1: force, 0: do not recalculate the campaign amount
+        :param create_accum: Int, 0 or 1, if 1 then create a accum campaign with all sub-campaigns to see statistics.
+        :return: Boolean, is always true, errors get raised
         """
 
-        assert type(emails) == list, "Param emails has to be a list of valid email addresses"
+        if not ip_group_name:
+            # Doctorsender doesn't really expose their IP groups, so client facing it should always be 'default.'
+            # Just to be sure, we will still take ip groups returned during the init call
+            ip_group_name = self.ips
 
-        receivers = ""
-        for email in emails:
-            receivers += f"""
-                <item xsi:type="ns2:Map"><item>
-                    <key xsi:type="xsd:string">email</key>
-                    <value xsi:type="xsd:string">{email}</value>
-                </item></item>"""
+        data = f"""
+            <item xsi:type="xsd:int">{campaign_id}</item>
+            <item xsi:type="xsd:str">{list_name}</item>
+            <item xsi:type="xsd:str">{ip_group_name}</item>
+            <item xsi:type="xsd:int">{speed}</item>
+            <item xsi:type="xsd:int">{segment_id}</item>
+            <item xsi:type="xsd:int">{partition_id}</item>
+            <item xsi:type="xsd:int">{amount}</item>
+            <item xsi:type="xsd:bool">{auto_delete_list}</item>
+            <item xsi:type="xsd:str">{programmed_date.strftime('%Y-%m-%d %H:%M:%S')}></item>
+            <item xsi:type="xsd:str">{time_zone}</item>
+            <item xsi:type="xsd:int">{need_confirm}</item>
+            <item xsi:type="xsd:str">{multidate}</item>
+            <item xsi:type="xsd:int">{has_to_be_reprogrammed}</item>
+            <item xsi:type="xsd:int">{create_accum}</item>"""
 
-        data = f"""<item xsi:type="xsd:int">{campaign_id}</item>
-            <item SOAP-ENC:arrayType="ns2:Map[1]" xsi:type="SOAP-ENC:Array">
-               {receivers}
-            </item>"""
-        drs_response = self._post_request('dsCampaignSendEmailsTest', data, ur_type=2)
+        drs_response = self._post_request('dsCampaignSendList', data)
 
-        # Response comes back as string 'true' or 'false', convert to boolean
+        # Response comes is always 'true' or returns an error
         if drs_response.content == 'true':
             sent = True
-        elif drs_response.content == 'false':
-            sent = False
         else:
             raise DrsSegmentError(f"Error while trying to send campaign {campaign_id}./n" /
                                   f"Response message: {drs_response.content}")
@@ -440,7 +465,7 @@ class DoctorSenderClient:
 
     # ------------------------------ Static Methods ------------------------------
 
-    def ip_groups(self) -> list:
+    def _ip_groups(self) -> list:
         """Get all account ip-groups
 
         :return: List containing the name of all ip-groups
