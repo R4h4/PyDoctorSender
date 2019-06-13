@@ -14,7 +14,7 @@ pip install pydoctorsender
 
 Usage is simple, here is an example on how to get all sending lists in your account:
 ```get_lists
-from doctorssender import DoctorSenderClient
+from doctorssender import DoctorSendenrClient
 
 client = DoctorSenderClient('user@doctorsender.com', 'example_api_token')
 client.lists()

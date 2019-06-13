@@ -1,5 +1,5 @@
 from .xml2dict import xml2dict
-from .errors import DrsReturnError
+from .errors import DrsReturnError, DrsParserError
 
 
 class DrsResponse:
@@ -35,8 +35,12 @@ class DrsResponse:
                 # One
                 return {ele['item']['key']: ele['item']['value']}
 
+            # Case i.e. for dsIpGroupGetNames
+            elif type(ele['item']) == str:
+                return ele['item']
+
             # In some cases (e.g. getting all categories, the result is a list of id and name of each object)
-            if type(ele['item']) == list:
+            elif type(ele['item']) == list:
                 # Case UserLists
                 if ele['item'][0]['item']['key'] == 'listName':
                     k = ele['item'][0]['item']['value']
@@ -46,7 +50,7 @@ class DrsResponse:
                         if kv_pair['item']['value'] != k:
                             v.update(self._key_value(kv_pair))
 
-                            # Case languages, categories, countries
+                # Case languages, categories, countries
                 else:
                     k = ele['item'][0]['item']['value']
                     for kv_pair in ele['item']:
@@ -54,6 +58,8 @@ class DrsResponse:
                             v = kv_pair['item']['value']
 
                 return {k: v}
+            else:
+                raise DrsParserError
 
         elif type(ele) == list:
             res_dict = dict()
@@ -61,7 +67,7 @@ class DrsResponse:
                 # Returns an have multiple shapes. dsSettingsGetAllFromEmail e.g. returns
                 try:
                     res_dict.update(self._key_value(child))
-                except TypeError as e:
+                except TypeError:
                     res_dict.update({i: ele[i]['item']})
             return res_dict
 

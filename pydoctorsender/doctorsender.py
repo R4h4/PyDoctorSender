@@ -332,7 +332,7 @@ class DoctorSenderClient:
 
         Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_campaign.html#a4a57c512898aab19aed88ac82c536c5e
 
-        :param segment_id: Id of the segment the condition applies for
+        :param campaign_id: Id of the campaign to be deleted
         :return: Boolean if deletion was successful
         """
 
@@ -355,7 +355,42 @@ class DoctorSenderClient:
 
         :param campaign_id: Int with the id of the campaign to be send
         :param emails: List of valid email addresses
-        :return: DrsResponse object, .content returns string with bool if test sendout was successful
+        :return: DrsResponse object, .content returns string with bool if test send out was successful
+        """
+
+        assert type(emails) == list, "Param emails has to be a list of valid email addresses"
+
+        receivers = ""
+        for email in emails:
+            receivers += f"""
+                <item xsi:type="ns2:Map"><item>
+                    <key xsi:type="xsd:string">email</key>
+                    <value xsi:type="xsd:string">{email}</value>
+                </item></item>"""
+
+        data = f"""<item xsi:type="xsd:int">{campaign_id}</item>
+            <item SOAP-ENC:arrayType="ns2:Map[1]" xsi:type="SOAP-ENC:Array">
+               {receivers}
+            </item>"""
+        drs_response = self._post_request('dsCampaignSendEmailsTest', data, ur_type=2)
+
+        # Response comes back as string 'true' or 'false', convert to boolean
+        if drs_response.content == 'true':
+            sent = True
+        elif drs_response.content == 'false':
+            sent = False
+        else:
+            raise DrsSegmentError(f"Error while trying to send campaign {campaign_id}./n" /
+                                  f"Response message: {drs_response.content}")
+
+        return sent
+
+    def send_campaign_list(self, campaign_id: int, list_name: str, ip_group_name: str='', ) -> bool:
+        """Send test emails for a given campaign
+
+        :param campaign_id: Int with the id of the campaign to be send
+        :param emails: List of valid email addresses
+        :return: DrsResponse object, .content returns string with bool if test send out was successful
         """
 
         assert type(emails) == list, "Param emails has to be a list of valid email addresses"

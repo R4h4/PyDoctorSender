@@ -22,3 +22,8 @@ class DrsReturnError(Error):
 class DrsCampaignError(Error):
     """Raised when Doctorsender returns an Error."""
     pass
+
+
+class DrsParserError(Error):
+    """Raised when the Doctorsender Response can not be parsed."""
+    pass
