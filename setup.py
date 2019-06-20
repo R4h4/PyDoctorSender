@@ -8,7 +8,7 @@ setup(
   author = 'Karsten Eckhardt',
   author_email = 'karsten.eckhardt@gmail.com',
   url = 'https://github.com/r4h4/PyDoctorSender',
-  download_url = 'https://github.com/r4h4/PyDoctorSender/archive/0.2.tar.gz',
+  download_url = 'https://github.com/r4h4/PyDoctorSender/archive/0.3.tar.gz',
   keywords = ['doctorsender', 'email', 'marketing', 'api'],   # Keywords that define your package best
   install_requires=[            # I get to this in a second
           'requests'
