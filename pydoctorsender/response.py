@@ -67,7 +67,7 @@ class DrsResponse:
                 # Returns an have multiple shapes. dsSettingsGetAllFromEmail e.g. returns
                 try:
                     res_dict.update(self._key_value(child))
-                except TypeError:
+                except (TypeError, ValueError):
                     res_dict.update({i: ele[i]['item']})
             return res_dict
 

@@ -4,6 +4,7 @@ import datetime as dt
 
 from .response import DrsResponse
 from .errors import *
+from .statics import countries, languages, categories
 
 
 class DoctorSenderClient:
@@ -53,7 +54,7 @@ class DoctorSenderClient:
         headers = {'content-type': 'application/soap+xml'}
         body = self._construct_body(function_name, data, ur_type)
 
-        response = requests.post(self.url, data=body, headers=headers)
+        response = requests.post(self.url, data=body.encode('utf-8'), headers=headers)
 
         # For easier debugging and further processing, the response is handed over as a DrsResponse object
         return DrsResponse(response)
@@ -260,7 +261,7 @@ class DoctorSenderClient:
         return campaign_stats
 
     def create_campaign(self, campaign_name: str, subject: str, from_name: str, from_email: str, reply_to: str,
-                        html: str, plain: str, template_id: int = '', category_id: int = 1, country: str = 'GER',
+                        html: str, plain: str, template_id: int = '', category_id: int = 1, country: str = 'DEU',
                         language_id: int = 3, list_unsubscribe: str = '', utm_campaign: str = '', utm_term: str = '',
                         utm_content: str = '', footer_usub_link: str = '', mirror_link: str = ''):
         """Creates (but not sends) a new campaign
@@ -285,14 +286,6 @@ class DoctorSenderClient:
         assert (from_email in available_emails) & (reply_to in available_emails), \
             f"from_email and reply_to needs to be set up. Available emails: {available_emails}"
 
-        # Load pre-saved categories, countries, languages for assertions
-        with open('./categories.json') as json_file:
-            categories = json.load(json_file)
-        with open('./countries.json') as json_file:
-            countries = json.load(json_file)
-        with open('./languages.json') as json_file:
-            languages = json.load(json_file)
-
         assert country in countries, "Country needs to be a valid iso-3 country code"
         assert str(language_id) in languages.keys(), f"Get valid Language ids via DoctorSenderClient.dsLanguageGetAll()"
         assert str(category_id) in categories.keys(), f"categoryid needs to be a valid Doctorsender category"
@@ -309,7 +302,7 @@ class DoctorSenderClient:
             <item xsi:type="xsd:str">{country}</item>
             <item xsi:type="xsd:int">{language_id}</item>
             <item xsi:type="xsd:str"><![CDATA[{html}]]></item>
-            <item xsi:type="xsd:str"><![CDATA[{plain}]]</item>
+            <item xsi:type="xsd:str"><![CDATA[{plain}]]></item>
             <item xsi:type="xsd:str">{list_unsubscribe}</item>
             <item xsi:type="xsd:str">{utm_campaign}</item>
             <item xsi:type="xsd:str">{utm_term}</item>
@@ -465,7 +458,7 @@ class DoctorSenderClient:
 
     # ------------------------------ Static Methods ------------------------------
 
-    def _ip_groups(self) -> list:
+    def _ip_groups(self) -> str:
         """Get all account ip-groups
 
         :return: List containing the name of all ip-groups
@@ -482,7 +475,7 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsLanguageGetAll', None)
         return drs_response.content
 
-    def countries(self):
+    def countries(self) -> dict:
         """Get all countries
         Static function, should never change
 
@@ -491,7 +484,7 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsCountryGetAll', None)
         return drs_response.content
 
-    def categories(self):
+    def categories(self) -> dict:
         """Get all categories
         Static function, should never change
 
@@ -500,7 +493,7 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsCategoryGetAll', None)
         return drs_response.content
 
-    def from_emails(self):
+    def from_emails(self) -> dict:
         """Get all account from-emails
 
         :return: List containing all available email addresses
@@ -508,6 +501,6 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsSettingsGetAllFromEmail', None)
         return drs_response.content
 
-    def ftp_data(self):
+    def ftp_data(self) -> dict:
         drs_response = self._post_request('dsFtpGetAccess', None)
         return drs_response.content
