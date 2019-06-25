@@ -499,7 +499,9 @@ class DoctorSenderClient:
         :return: List containing all available email addresses
         """
         drs_response = self._post_request('dsSettingsGetAllFromEmail', None)
-        return drs_response.content
+        res = [drs_response.content] if type(drs_response.content) == str else list(drs_response.content.values())
+
+        return res
 
     def ftp_data(self) -> dict:
         drs_response = self._post_request('dsFtpGetAccess', None)

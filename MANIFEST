@@ -5,4 +5,5 @@ pydoctorsender\__init__.py
 pydoctorsender\doctorsender.py
 pydoctorsender\errors.py
 pydoctorsender\response.py
+pydoctorsender\statics.py
 pydoctorsender\xml2dict.py
