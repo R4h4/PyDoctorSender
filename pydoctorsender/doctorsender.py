@@ -420,7 +420,7 @@ class DoctorSenderClient:
             <item xsi:type="xsd:int">{partition_id}</item>
             <item xsi:type="xsd:int">{amount}</item>
             <item xsi:type="xsd:bool">{auto_delete_list}</item>
-            <item xsi:type="xsd:str">{programmed_date.strftime('%Y-%m-%d %H:%M:%S')}></item>
+            <item xsi:type="xsd:str">{programmed_date.strftime('%Y-%m-%d %H:%M:%S')}</item>
             <item xsi:type="xsd:str">{time_zone}</item>
             <item xsi:type="xsd:int">{need_confirm}</item>
             <item xsi:type="xsd:str">{multidate}</item>
