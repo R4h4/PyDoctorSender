@@ -282,7 +282,7 @@ class DoctorSenderClient:
         :return: Int with the id of the new campaign
         """
         # To avoid hard to catch 'SOAP-ENV:Client'-errors due to using non existing from_email or reply_to email address
-        available_emails = list(self.from_emails().values())
+        available_emails = self.from_emails()
         assert (from_email in available_emails) & (reply_to in available_emails), \
             f"from_email and reply_to needs to be set up. Available emails: {available_emails}"
 
