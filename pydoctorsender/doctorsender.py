@@ -293,9 +293,9 @@ class DoctorSenderClient:
         assert bool(template_id) | bool(list_unsubscribe), "Either template id or list unsubscribe need to be defined"
 
         data = f"""
-            <item xsi:type="xsd:str">{campaign_name}</item>
-            <item xsi:type="xsd:str">{subject}</item>
-            <item xsi:type="xsd:str">{from_name}</item>
+            <item xsi:type="xsd:str"><![CDATA[{campaign_name}]]></item>
+            <item xsi:type="xsd:str"><![CDATA[{subject}]]></item>
+            <item xsi:type="xsd:str"><![CDATA[{from_name}]]></item>
             <item xsi:type="xsd:str">{from_email}</item>
             <item xsi:type="xsd:str">{reply_to}</item>
             <item xsi:type="xsd:int">{category_id}</item>
