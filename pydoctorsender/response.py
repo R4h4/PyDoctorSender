@@ -21,8 +21,8 @@ class DrsResponse:
         :return: Returns the inner content of the API response (remove all unnecessary stuff around
         """
         if 'Fault' in self.dict['Envelope']['Body']:
-            error_code = self.dict['Envelope']['Body']['faultcode']
-            error_msg = self.dict['Envelope']['Body']['faultstring']
+            error_code = self.dict['Envelope']['Body']['Fault']['faultcode']
+            error_msg = self.dict['Envelope']['Body']['Fault']['faultstring']
             return DrsReturnError(f"Doctorsender error: {error_code}, error message: {error_msg}")
         return self._drs_reduce_dict()
 
