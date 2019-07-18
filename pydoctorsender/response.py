@@ -1,5 +1,5 @@
-from .xml2dict import xml2dict
-from .errors import DrsReturnError, DrsParserError
+from xml2dict import xml2dict
+from errors import DrsReturnError, DrsParserError
 
 
 class DrsResponse:
@@ -20,6 +20,10 @@ class DrsResponse:
         """
         :return: Returns the inner content of the API response (remove all unnecessary stuff around
         """
+        if 'Fault' in res.dict['Envelope']['Body']:
+            error_code = res.dict['Envelope']['Body']['faultcode']
+            error_msg = res.dict['Envelope']['Body']['faultstring']
+            return DrsReturnError(f"Doctorsender error: {error_code}, error message: {error_msg}")
         return self._drs_reduce_dict()
 
     def _xml2dict(self):
