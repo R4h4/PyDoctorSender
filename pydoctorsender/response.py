@@ -1,5 +1,5 @@
-from xml2dict import xml2dict
-from errors import DrsReturnError, DrsParserError
+from .xml2dict import xml2dict
+from .errors import DrsReturnError, DrsParserError
 
 
 class DrsResponse:
