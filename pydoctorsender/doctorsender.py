@@ -317,6 +317,8 @@ class DoctorSenderClient:
             campaign_id = int(drs_response.content)
         except ValueError as e:
             raise ValueError(f"Return id is not an integer: {drs_response.content}")
+        except TypeError as e:
+            raise DrsReturnError(f"Internal Doctorsender error. Code: {e}")
 
         return campaign_id
 
