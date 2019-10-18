@@ -508,3 +508,31 @@ class DoctorSenderClient:
     def ftp_data(self) -> dict:
         drs_response = self._post_request('dsFtpGetAccess', None)
         return drs_response.content
+
+    def get_unsubscribers(self, list_name: str, start_date: dt.datetime, end_date: dt.datetime) -> list:
+        """Download the unsubscribers of a given list, in a given time frame.
+        :return: A List of user-unsubscribe objects. The objects have the keys 'timestamp', 'email', and 'list'
+        """
+        data = f"""
+            <item xsi:type="xsd:str">{start_date.strftime('%Y-%m-%d %H:%M:%S')}</item>
+            <item xsi:type="xsd:str">{end_date.strftime('%Y-%m-%d %H:%M:%S')}</item>
+            <item xsi:type="xsd:str">{list_name}</item>
+            <item xsi:type="xsd:bool">false</item>
+            <item xsi:type="xsd:bool">false</item>"""
+
+        drs_response = self._post_request('dsUsersListGetUnsubscribes', data)
+
+        # The response content is a dict with an arbitrary int key and a string value that contains the date of the
+        # unsubscribe event, the time, the user email and the list name. The values are separated by a semicolon.
+        # So we reshape it into a list of those objects
+        unsubscribers = list()
+        for i, ele in drs_response.content.items():
+            unsubscribe_data = ele.split(';')
+            timestamp = dt.datetime.strptime(unsubscribe_data[0] + unsubscribe_data[1], '%Y%m%d%H:%M')
+            unsubscribers.append({
+                'timestamp': timestamp,
+                'email': unsubscribe_data[2],
+                'list': unsubscribe_data[3]
+
+            })
+        return unsubscribers
