@@ -495,7 +495,7 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsCategoryGetAll', None)
         return drs_response.content
 
-    def from_emails(self) -> dict:
+    def from_emails(self) -> list:
         """Get all account from-emails
 
         :return: List containing all available email addresses
@@ -536,3 +536,49 @@ class DoctorSenderClient:
 
             })
         return unsubscribers
+
+    def get_list_fields(self, list_name: str, is_testlist: bool = False) -> dict:
+        """
+        Retrieve the field names for a given list.
+        :return: A dict with the field names as keys and the field types as value
+        """
+        data = f"""
+            <item xsi:type="xsd:str">{list_name}</item>
+            <item xsi:type="xsd:bool">{is_testlist}</item>
+            <item xsi:type="xsd:bool">false</item>"""
+
+        drs_response = self._post_request('dsUsersListGetFields', data)
+
+        return drs_response.content
+
+    def download_list(self, list_name: str, is_testlist: bool = False, field: str = 'all') -> str:
+        """
+        Create a download link for a csv file that contains all users in a given list.
+        >>> link = client.download_list('list', field='all')
+        >>> df = pd.read_csv(link)
+
+        Only all fields can be downloaded, since adding the line for is_testlist always returns "List cound now be found."
+
+        :return: A string containing the download link. This link can take a while to get active
+        """
+        data = f"""<item xsi:type="xsd:str">{list_name}</item>"""
+
+        drs_response = self._post_request('dsUsersListDownload', data)
+
+        return drs_response.content
+
+    def download_hardbouncer(self, list_name: str, field: str = 'email') -> str:
+        """
+        Create a download link for a csv file that contains all hardbouncer in a given list.
+        >>> link = client.download_hardbouncer('list', field='all')
+        >>> df = pd.read_csv(link)
+
+        :return: A string containing the download link. This link can take a while to get active
+        """
+        data = f"""
+            <item xsi:type="xsd:str">{list_name}</item>
+            <item xsi:type="xsd:str">{field}</item>"""
+
+        drs_response = self._post_request('dsUsersListDownloadHard', data)
+
+        return drs_response.content
