@@ -23,7 +23,7 @@ class DrsResponse:
         if 'Fault' in self.dict['Envelope']['Body']:
             error_code = self.dict['Envelope']['Body']['Fault']['faultcode']
             error_msg = self.dict['Envelope']['Body']['Fault']['faultstring']
-            return DrsReturnError(f"Doctorsender error: {error_code}, error message: {error_msg}")
+            raise DrsReturnError(f"Doctorsender error: {error_code}, error message: {error_msg}")
         return self._drs_reduce_dict()
 
     def _xml2dict(self):

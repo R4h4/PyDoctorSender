@@ -64,6 +64,9 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# General idea folder
+.idea
+
 # Editor-based Rest Client
 .idea/httpRequests
 
