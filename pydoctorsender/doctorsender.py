@@ -441,6 +441,32 @@ class DoctorSenderClient:
         return sent
 
     # ------------------------------ User Methods ------------------------------
+    def campaign_get_user_statistics(self, campaign_id: str, stats_type: str) -> list:
+            """
+            Get a list of emails that did something with a campaign
+            Doc: http://soapwebservice.doctorsender.com/doxy/html/classds_campaign.html#a6867f4b627bd583c93568f520fe92625
+            :param campaign_id: Id of the campaign
+            :param stats_type: The type of email info you need to get. You must choose one of this
+                type: ["sent","openers","clickers","soft_bounced","hard_bounced","complaint","unsubscribe"]
+
+            :return:
+            """
+            assert stats_type in  ["sent","openers","clickers","soft_bounced","hard_bounced","complaint","unsubscribe"]
+
+            data = f"""
+            <item xsi:type="xsd:str">{campaign_id}</item>
+            <item xsi:type="xsd:str">{stats_type}</item>
+            """
+            drs_response = self._post_request('dsCampaignGetUserStatistics', data)
+            # Return is a json string with key 'email' and an array of emails as a value
+            try:
+                emails = json.loads(drs_response.content)['email']
+            except KeyError:
+                raise DrsReturnError("Returned JSON string does not contain key 'email'")
+            except json.JSONDecodeError:
+                raise DrsReturnError(f"Returned object is not a valid JSON string: {drs_response}")
+
+            return emails
 
     def lists(self, test_lists=0):
             """Get all user lists in the account
