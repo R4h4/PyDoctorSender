@@ -226,6 +226,20 @@ class DoctorSenderClient:
 
         return deleted
 
+    def download_list(self, list_name: str, is_test_list: bool = False, field: str = 'email'):
+        """Starts the process to download a list by requesting it and returning the download URL
+
+        """
+
+        data = f"""
+            <item xsi:type="xsd:int">{list_name}</item>
+            <item xsi:type="xsd:bool">{is_test_list}</item>
+            <item xsi:type="xsd:str">{field}</item>
+        """
+        drs_response = self._post_request('dsSegmentsDel', data)
+
+        return drs_response.content
+
     # ------------------------------ Campaign Methods ------------------------------
 
     def campaign(self, campaign_id: int) -> dict:
@@ -383,7 +397,7 @@ class DoctorSenderClient:
         return sent
 
     def send_campaign_list(self, campaign_id: int, list_name: str, ip_group_name: str='', speed: int=5,
-                           segment_id: int=0, partition_id: int=0, amount: int=0, auto_delete_list: bool=False,
+                           segment_id: int = 0, partition_id: int = 0, amount: int=0, auto_delete_list: bool=False,
                            programmed_date: dt.datetime = dt.datetime.now(), time_zone: str= 'Europe/Madrid',
                            need_confirm: int=0, multidate: list="", has_to_be_reprogrammed: int = 0,
                            create_accum: int=1) -> bool:
@@ -439,6 +453,58 @@ class DoctorSenderClient:
                                   f"Response message: {drs_response.content}")
 
         return sent
+
+    def list_campaigns(self, sql_where: str, fields: list, get_statistics: bool = False) -> list:
+        available_fields = ["name", "amount", "subject", "from_name", "from_email", "sender", "html", "text",
+                            "reply_to", "list_unsubscribe", "speed", "send_date", "status", "user_list",
+                            "segment_id", "segment"]
+
+        assert all([True if field in available_fields else False for field in fields])
+
+        data = f"""
+            <item xsi:type="xsd:str">{sql_where}</item>
+            <item SOAP-ENC:arrayType="xsd:string[1]" xsi:type="SOAP-ENC:Array">
+                {''.join(f'<item xsi:type="xsd:string">{field}</item>' for field in fields)}
+            </item>
+            <item xsi:type="xsd:int">{1 if get_statistics else 0}</item>
+        """
+        drs_response = self._post_request('dsCampaignGetAll', data)
+
+        # The content does not follow the standard rules, so we parse it separatly
+        # First check if there is an error by calling the response property
+        _ = drs_response.content
+        # If that works without an en error, retrieve the items and parse it
+        try:
+            items = drs_response.dict['Envelope']['Body']['{ns1}webserviceResponse']['webserviceReturn'][1]['item'][
+                'value']
+
+            campaigns = [{i['item']['key']: i['item']['value'] for i in c['item']} for c in items]
+        except:
+            raise DrsReturnError(drs_response.content)
+
+        return campaigns
+
+    def campaign_get_user_statistics(self, campaign_id: str, stats_type: str) -> list:
+
+        assert stats_type in  ["sent","openers","clickers","soft_bounced","hard_bounced","complaint","unsubscribe"]
+
+        data = f"""
+            <item xsi:type="xsd:str">{campaign_id}</item>
+            <item xsi:type="xsd:str">{stats_type}</item>
+        """
+        drs_response = self._post_request('dsCampaignGetUserStatistics', data)
+        # Return is a json string with key 'email' and an array of emails as a value
+        try:
+            emails = json.loads(drs_response.content)['email']
+        except KeyError:
+            raise DrsReturnError("Returned JSON string does not contain key 'email'")
+        except json.JSONDecodeError:
+            raise DrsReturnError(f"Returned object is not a valid JSON string: {drs_response}")
+        except TypeError:
+            # Happens when there no users are returned
+            emails = []
+
+        return emails
 
     # ------------------------------ User Methods ------------------------------
     def campaign_get_user_statistics(self, campaign_id: str, stats_type: str) -> list:
