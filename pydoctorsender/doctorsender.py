@@ -685,4 +685,4 @@ class DoctorSenderClient:
         """
         drs_response = self._post_request('dsUsersGetUserActivity', data, timeout=300)
 
-        return drs_response
+        return drs_response.content
