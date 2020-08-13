@@ -43,7 +43,7 @@ class DoctorSenderClient:
                     </SOAP-ENV:Envelope>
                     """
 
-    def _post_request(self, function_name: str, data: str, ur_type: int = 3) -> DrsResponse:
+    def _post_request(self, function_name: str, data: str, ur_type: int = 3, timeout=5) -> DrsResponse:
         """Every request to the API is a POST request (because fo the SOAP standard). This method constructs the request
 
         :param function_name: String with API function name as per Doctorsender API docs
@@ -54,7 +54,7 @@ class DoctorSenderClient:
         headers = {'content-type': 'application/soap+xml'}
         body = self._construct_body(function_name, data, ur_type)
 
-        response = requests.post(self.url, data=body.encode('utf-8'), headers=headers)
+        response = requests.post(self.url, data=body.encode('utf-8'), headers=headers, timeout=timeout)
 
         # For easier debugging and further processing, the response is handed over as a DrsResponse object
         return DrsResponse(response)
@@ -674,3 +674,15 @@ class DoctorSenderClient:
         drs_response = self._post_request('dsUsersListDownloadHard', data)
 
         return drs_response.content
+
+    def download_events(self, from_date: dt.date, until_date: dt.date):
+        """Requests a user event export
+        """
+
+        data = f"""
+            <item xsi:type="xsd:str">{from_date}</item>
+            <item xsi:type="xsd:str">{until_date}</item>
+        """
+        drs_response = self._post_request('dsUsersGetUserActivity', data, timeout=300)
+
+        return drs_response
