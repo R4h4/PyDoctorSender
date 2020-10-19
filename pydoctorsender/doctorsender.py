@@ -43,7 +43,7 @@ class DoctorSenderClient:
                     </SOAP-ENV:Envelope>
                     """
 
-    def _post_request(self, function_name: str, data: str, ur_type: int = 3, timeout=10) -> DrsResponse:
+    def _post_request(self, function_name: str, data: str, ur_type: int = 3, timeout=(10,40)) -> DrsResponse:
         """Every request to the API is a POST request (because fo the SOAP standard). This method constructs the request
 
         :param function_name: String with API function name as per Doctorsender API docs
