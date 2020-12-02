@@ -3,13 +3,13 @@ from distutils.core import setup
 setup(
     name='pydoctorsender',
     packages=['pydoctorsender'],
-    version='0.19',
+    version='0.20',
     license='MIT',
     description='An unofficial API wrapper for DoctorSender',
     author='Karsten Eckhardt',
     author_email='karsten.eckhardt@gmail.com',
     url='https://github.com/r4h4/PyDoctorSender',
-    download_url='https://github.com/r4h4/PyDoctorSender/archive/v0.19.tar.gz',
+    download_url='https://github.com/r4h4/PyDoctorSender/archive/v0.20.tar.gz',
     keywords=['doctorsender', 'email', 'marketing', 'api'],  # Keywords that define your package best
     install_requires=[
         'requests'
