@@ -1,3 +1,4 @@
+from typing import List
 import json
 import requests
 import datetime as dt
@@ -335,6 +336,22 @@ class DoctorSenderClient:
             raise DrsReturnError(f"Internal Doctorsender error. Code: {e}")
 
         return campaign_id
+
+    def set_exclusion(self, campaign_id: int, campaigns_to_exclude: List[int]):
+        data = f"""
+            <item xsi:type="xsd:int">{campaign_id}</item>
+            <item xsi:type="xsd:str">{','.join([str(c_id) for c_id in campaigns_to_exclude])}</item>"""
+        drs_response = self._post_request('dsCampaignSetExclusions', data)
+        # Response comes back as string 'true' or 'false', convert to boolean
+        if drs_response.content == 'true':
+            exclusion_set = True
+        elif drs_response.content == 'false':
+            exclusion_set = False
+        else:
+            raise DrsSegmentError(f"Error while trying to set exclusion for campaign {campaign_id}./n"
+                                  f"Response message: {drs_response.content}")
+
+        return exclusion_set
 
     def delete_campaign(self, campaign_id: int) -> bool:
         """Delete a campaign
